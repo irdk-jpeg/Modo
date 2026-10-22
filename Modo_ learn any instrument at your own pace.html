@@ -1,0 +1,163 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Modo: learn any instrument at your own pace</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#eceff4;--card:#fff;--ink:#101828;--mut:#5b6478;--ac:#2f4bd8;--on:#fff;--am:#f2b01e;--ln:#d5dbe6;--ok:#1f8a4c;--bad:#c4372f;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1320;--card:#171e32;--ink:#eef1f8;--mut:#9aa4bd;--ac:#8197ff;--on:#0e1320;--ln:#2a3350;--ok:#4cc27e;--bad:#ff7d73;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1320;--card:#171e32;--ink:#eef1f8;--mut:#9aa4bd;--ac:#8197ff;--on:#0e1320;--ln:#2a3350;--ok:#4cc27e;--bad:#ff7d73;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "DM Sans",system-ui,sans-serif}
+.w{max-width:860px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between}
+h1,h2,h3{font-family:"Bricolage Grotesque",Georgia,sans-serif;line-height:1.15;margin:.2em 0}
+h1{font-size:2.4rem;margin:0}h2{font-size:1.6rem}h3{font-size:1.15rem}
+.sel{display:flex;gap:10px;flex-wrap:wrap}
+label{display:block;font-size:.85rem;color:var(--mut);margin:8px 0}
+select,input[type=number]{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--ln);border-radius:8px;padding:7px 9px;display:block;max-width:100%}
+input[type=number]{display:inline-block;width:4.5em}
+input[type=range]{display:block;width:100%;accent-color:var(--ac)}
+nav{display:flex;gap:6px;overflow-x:auto;margin:14px 0;padding-bottom:4px}
+nav button{font:inherit;font-weight:500;border:1px solid var(--ln);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 16px;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:16px;margin:12px 0}
+.card.hi{border-left:5px solid var(--am)}
+.tag{font-size:.8rem;color:var(--mut)}
+.mut{color:var(--mut)}
+.btn{font:inherit;font-weight:700;background:var(--ac);color:var(--on);border:0;border-radius:9px;padding:9px 16px;cursor:pointer;margin:4px 4px 4px 0}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ln)}
+.btn:disabled{opacity:.5;cursor:default}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--am);outline-offset:2px}
+.big{font:700 5.5rem/1 "Bricolage Grotesque",Georgia,sans-serif;text-align:center;margin:6px 0}
+.meter{position:relative;height:14px;background:var(--ln);border-radius:9px;margin:16px 0}
+.meter:after{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.meter i{position:absolute;top:-4px;width:10px;height:22px;margin-left:-5px;border-radius:5px;background:var(--am);left:50%;transition:left .1s;z-index:1}
+.bar{height:10px;background:var(--ln);border-radius:6px;overflow:hidden}
+.bar b{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.opts button,.pad button{font:700 1.05rem "DM Sans",sans-serif;min-width:56px;padding:12px;border-radius:10px;border:1px solid var(--ln);background:var(--card);color:var(--ink);cursor:pointer}
+.opts button:hover,.pad button:hover{border-color:var(--ac)}
+.pad{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:12px}.pad button{min-width:0;padding:12px 0}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0}
+.chip{min-width:38px;text-align:center;padding:5px 8px;border-radius:8px;border:1px solid var(--ln);font-weight:700}
+.chip.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.chip.cur{background:var(--am);color:#101828;border-color:var(--am)}
+.chip.off{opacity:.35}
+.dots{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.dots i{width:22px;height:22px;border-radius:50%;background:var(--ln)}.dots i.on{background:var(--ac)}.dots i.ci{background:var(--am)}
+.tap{display:block;width:100%;font:700 1.4rem "Bricolage Grotesque",sans-serif;padding:34px;border-radius:16px;border:2px dashed var(--ac);background:transparent;color:var(--ink);cursor:pointer;margin:8px 0;touch-action:manipulation}
+.tap:active,.tap.f{background:var(--ac);color:var(--on)}
+.row{display:grid;grid-template-columns:150px 1fr 48px;gap:10px;align-items:center;margin:10px 0}
+.good{color:var(--ok);font-weight:700}.warn{color:var(--bad);font-weight:700}
+footer{margin:24px 0 8px;font-size:.85rem;color:var(--mut)}
+@media(max-width:520px){.big{font-size:4.2rem}.row{grid-template-columns:110px 1fr 40px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><div class="w">
+<header><h1>Modo</h1><div class="sel"><label>Instrument<select id="in" onchange="setInst(this.value)"></select></label><label>Level<select id="lv" onchange="setLvl(this.value)"></select></label></div></header>
+<nav id="nav"></nav><main id="V"></main>
+<footer>Free to use, no account needed. Your progress is saved privately in this browser.</footer></div>
+<script>
+const $=s=>document.querySelector(s),V=$("#V"),R={};
+const N=["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"],LV=["Beginner","Intermediate","Advanced"],MAJ=[0,2,4,5,7,9,11];
+const nm=m=>N[m%12]+(Math.floor(m/12)-1),fr=m=>440*Math.pow(2,(m-69)/12),rnd=a=>a[Math.random()*a.length|0];
+const I={
+guitar:{n:"6-string guitar",r:[40,64],L:[["Beginner","Posture and hand placement","Rest the body on your thigh with the neck tilted slightly up. Keep your fretting thumb behind the neck and press just behind each fret so notes ring clearly.","play"],["Beginner","Open strings and tuning","Learn the strings from low to high: E A D G B E. Play each one slowly and check it with the Play-it trainer.","play"],["Intermediate","Palm muting","Rest the edge of your picking-hand palm lightly on the strings at the bridge. Pick the low strings for a short, tight thud, then vary the pressure and keep time with the Rhythm trainer.","rhythm"]]},
+bass:{n:"Bass guitar",r:[28,52],L:[["Beginner","Posture and plucking hand","Set the strap so the bass sits where a guitar would. Anchor your thumb on the pickup or thumb rest and keep your wrist relaxed.","play"],["Beginner","Alternating fingers","Alternate index and middle fingers on every note to get an even tone and speed. Start slowly and check your pitch.","play"],["Intermediate","Muting and ghost notes","Lightly touch the strings with your fretting hand so they make a dull click. Place ghost notes between full notes to build groove.","rhythm"]]},
+piano:{n:"Piano",r:[48,72],L:[["Beginner","Posture and hand shape","Sit with elbows level with the keys, wrists flat and fingers gently curved. Put your right thumb on middle C.","play"],["Beginner","Five-finger positions","Place fingers 1 to 5 on C D E F G. Play up and down evenly, then try the Songs section.","songs"],["Intermediate","Scales and thumb-under","Play C major with one hand, passing your thumb under your hand smoothly after the third finger. Keep the rhythm even.","rhythm"]]},
+woodwind:{n:"Woodwinds (flute, clarinet, sax)",r:[60,84],L:[["Beginner","Posture and breathing","Stand or sit tall and breathe low into your belly. Keep the air steady and your shoulders down.","play"],["Beginner","Long tones","Hold a single note for eight seconds. The Play-it trainer shows if your pitch wobbles.","play"],["Intermediate","Tonguing","Say “tu” at the start of each note for clear articulation. Practise it on repeated notes against the metronome.","rhythm"]]},
+brass:{n:"Brass (trumpet, trombone, horn)",r:[55,79],L:[["Beginner","Posture and breathing","Sit or stand tall, breathe in low and blow warm, steady air. Keep the instrument level and relaxed.","play"],["Beginner","Buzzing and long tones","Buzz your lips on the mouthpiece to make a steady tone, then hold a note for eight seconds.","play"],["Intermediate","Slurs","Change notes with air and lips alone, without tonguing. Aim for a smooth, connected sound.","songs"]]},
+percussion:{n:"Percussion and drums",r:[48,72],L:[["Beginner","Grip and stance","Use a matched grip: the stick pivots between thumb and index finger, other fingers wrap loosely. Let the stick rebound from the pad.","rhythm"],["Beginner","Stick control","Alternate right and left hands (RLRL) at a slow tempo. Keep both hands at the same volume.","rhythm"],["Intermediate","Cross-sticking","Lay the stick across the snare and tap its shaft against the rim. Practise it on beats 2 and 4 using the backbeat pattern.","rhythm"]]}};
+const C=[["Beginner","Hearing and naming notes","Every note has a letter name (C D E F G A B, plus sharps). Listen, then name it. Difficulty adapts as you improve.","ear"],["Beginner","Keeping steady time","Rhythm makes music feel right. Play with the click and aim to land within about 100 ms of each beat.","rhythm"]];
+const D={inst:"guitar",lvl:"Beginner",xp:0,done:{},p:[0,0],t:[0,0],e:[0,0],sf:[0,0],ed:0,es:0,s:{}};
+let S,cur="learn",T=[],loopId,raf,sched,M=null,AC;
+function load(){let o={};try{o=JSON.parse(localStorage.getItem("modo1")||"{}")}catch(e){}S=JSON.parse(JSON.stringify(Object.assign({},D,o)))}
+function save(){try{localStorage.setItem("modo1",JSON.stringify(S))}catch(e){}}
+/* audio */
+function ac(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}
+function tone(m,t0,dur,g){const c=ac(),o=c.createOscillator(),v=c.createGain();g=g||.25;t0=t0||c.currentTime;o.type="triangle";o.frequency.value=fr(m);v.gain.setValueAtTime(0,t0);v.gain.linearRampToValueAtTime(g,t0+.02);v.gain.setValueAtTime(g,t0+Math.max(.03,dur-.06));v.gain.linearRampToValueAtTime(0,t0+dur);o.connect(v);v.connect(c.destination);o.start(t0);o.stop(t0+dur+.02)}
+function click(t,a){const c=ac(),o=c.createOscillator(),v=c.createGain();o.frequency.value=a?1500:1000;v.gain.setValueAtTime(.3,t);v.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(v);v.connect(c.destination);o.start(t);o.stop(t+.06)}
+async function mic(){if(M)return M;try{const st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}),c=ac(),src=c.createMediaStreamSource(st),an=c.createAnalyser();an.fftSize=4096;src.connect(an);M={st,an,buf:new Float32Array(4096),sr:c.sampleRate};return M}catch(e){return null}}
+function micOff(){if(M){M.st.getTracks().forEach(t=>t.stop());M=null}clearInterval(loopId)}
+function pitch(b,sr){let n=b.length,s=0;for(let i=0;i<n;i++)s+=b[i]*b[i];if(Math.sqrt(s/n)<.012)return -1;let r1=0,r2=n-1;for(let i=0;i<n/2;i++)if(Math.abs(b[i])<.2){r1=i;break}for(let i=1;i<n/2;i++)if(Math.abs(b[n-i])<.2){r2=n-i;break}b=b.slice(r1,r2);n=b.length;if(n<200)return -1;const c=new Float32Array(n);for(let i=0;i<n;i++){let x=0;for(let j=0;j<n-i;j++)x+=b[j]*b[j+i];c[i]=x}let d=0;while(d<n-2&&c[d]>c[d+1])d++;let mx=-1,mp=-1;for(let i=d;i<n;i++)if(c[i]>mx){mx=c[i];mp=i}if(mp<1||mp>=n-1)return -1;let t0=mp;const x1=c[t0-1],x2=c[t0],x3=c[t0+1],a=(x1+x3-2*x2)/2,bb=(x3-x1)/2;if(a)t0-=bb/(2*a);const f=sr/t0;return f>25&&f<2500?f:-1}
+/* nav */
+function stop(){micOff();T.forEach(clearTimeout);T=[];clearInterval(sched);cancelAnimationFrame(raf);RH=null}
+function go(v){stop();cur=v;document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));R[v]();window.scrollTo(0,0)}
+function setInst(v){S.inst=v;save();go(cur)}
+function setLvl(v){S.lvl=v;S.ed=LV.indexOf(v)*2;S.es=0;save();$("#lv").value=v;go(cur)}
+/* learn */
+R.learn=()=>{const ls=I[S.inst].L.concat(C).map((l,i)=>({id:S.inst+i,l})),d=ls.filter(x=>S.done[x.id]).length;
+V.innerHTML=`<h2>${I[S.inst].n}</h2><p class="mut">Choose any lesson, in any order. ${d} of ${ls.length} complete. Lessons for your level (${S.lvl}) have a yellow edge.</p>`+ls.map(({id,l})=>`<div class="card${l[0]===S.lvl?" hi":""}"><span class="tag">${l[0]}</span><h3>${l[1]}</h3><p>${l[2]}</p><button class="btn" onclick="go('${l[3]}')">Practise this</button><button class="btn ghost" onclick="done('${id}')">${S.done[id]?"✓ Completed":"Mark complete"}</button></div>`).join("")}
+function done(id){if(S.done[id])delete S.done[id];else{S.done[id]=1;S.xp+=15}save();R.learn()}
+/* ear */
+let q;
+R.ear=()=>{const d=S.ed,pool=d<2?MAJ:N.map((x,i)=>i),a=rnd(pool),o=[a],n=Math.min(3+d,pool.length);while(o.length<n){const p=rnd(pool);if(!o.includes(p))o.push(p)}o.sort((x,y)=>x-y);q={a,m:60+a+(d>=4&&Math.random()<.5?12:0)};
+V.innerHTML=`<h2>Ear trainer</h2><p class="mut">Listen and name the note. Difficulty adapts to you: now at ${d+1} of 6.</p><div class="card"><button class="btn" onclick="tone(q.m,0,1)">▶ Play the note</button><div class="opts">${o.map(p=>`<button onclick="ans(${p})">${N[p]}</button>`).join("")}</div><p id="fb" aria-live="polite"></p></div>`;tone(q.m,0,1)}
+function ans(p){if(q.d)return;q.d=1;const ok=p===q.a;S.e[0]+=ok?1:0;S.e[1]++;if(ok){S.xp+=2;S.es=Math.max(S.es,0)+1}else S.es=Math.min(S.es,0)-1;if(S.es>=4){S.ed=Math.min(5,S.ed+1);S.es=0}if(S.es<=-2){S.ed=Math.max(0,S.ed-1);S.es=0}save();$("#fb").innerHTML=`<span class="${ok?"good":"warn"}">${ok?"Correct.":"Not quite."}</span> That was ${N[q.a]}. <button class="btn" onclick="R.ear()">Next note</button>`;tone(q.m,0,1)}
+/* play-it */
+let P;
+function tgt(){const r=I[S.inst].r,ms=[];for(let m=r[0];m<=r[1];m++)if(MAJ.includes(m%12)&&m!==P.t)ms.push(m);P.t=rnd(ms);P.c=0;P.e=[]}
+R.play=()=>{if(S.inst==="percussion"){V.innerHTML=`<h2>Play-it trainer</h2><div class="card"><p>Drums don’t have a pitch to check. Use the Rhythm trainer with microphone hits instead.</p><button class="btn" onclick="go('rhythm')">Open rhythm trainer</button></div>`;return}
+P={t:0};tgt();
+V.innerHTML=`<h2>Play-it trainer</h2><p class="mut">Play the note shown on your ${I[S.inst].n.toLowerCase()}. The microphone listens and shows how sharp or flat you are. Any octave counts, and notes are concert pitch.</p><div class="card" style="text-align:center"><div class="big" id="tg">${N[P.t%12]}</div><div>Heard: <b id="hd">–</b> <span id="ct"></span></div><div class="meter"><i id="mk"></i></div><div class="bar"><b id="hb"></b></div><p id="pm" class="mut" aria-live="polite">Hold the note steadily for about one second.</p><button class="btn" id="mb" onclick="startMic()">Start microphone</button><button class="btn ghost" onclick="tone(P.t,0,1.2)">Hear it</button><button class="btn ghost" onclick="nextT()">Skip</button></div>`}
+function nextT(){tgt();$("#tg").textContent=N[P.t%12];$("#hb").style.width="0"}
+async function startMic(){const m=await mic();if(!m){$("#pm").textContent="Microphone unavailable. Allow access in your browser, or open this page in its own tab. Ear, Rhythm taps and Songs work without a microphone.";return}$("#mb").disabled=true;loopId=setInterval(tick,90)}
+function tick(){M.an.getFloatTimeDomainData(M.buf);const f=pitch(M.buf,M.sr);if(f<0){$("#hd").textContent="–";$("#ct").textContent="";P.c=0;P.e=[];$("#hb").style.width="0";return}
+const m=69+12*Math.log2(f/440),r=Math.round(m);let x=((m-P.t)%12+12)%12;if(x>6)x-=12;const off=x*100;
+$("#hd").textContent=nm(r);$("#mk").style.left=(50+Math.max(-50,Math.min(50,off)))+"%";
+if(Math.abs(off)<=30){$("#ct").textContent=Math.abs(off)<8?"in tune":(off>0?"slightly sharp":"slightly flat");P.c++;P.e.push(Math.abs(off))}else{$("#ct").textContent=Math.abs(off)>=50?"different note":(off>0?"too sharp":"too flat");P.c=0;P.e=[]}
+$("#hb").style.width=Math.min(100,P.c*10)+"%";
+if(P.c>=10){const sc=Math.max(40,Math.round(100-P.e.reduce((a,b)=>a+b,0)/P.e.length*2));S.p[0]+=sc;S.p[1]++;S.xp+=5;save();$("#pm").innerHTML=`<span class="good">Nice, ${N[P.t%12]} scored ${sc}/100.</span> Next note ready.`;nextT()}}
+/* rhythm */
+let RH;
+R.rhythm=()=>{V.innerHTML=`<h2>Rhythm trainer</h2><p class="mut">Four count-in beats, then four bars. Tap the pad, press Space, or play a note or hit on your instrument with the microphone on. Use headphones so the mic doesn’t pick up the click.</p><div class="card"><label>Tempo: <b id="bv">80</b> BPM<input type="range" id="bp" min="40" max="160" value="80" oninput="$('#bv').textContent=this.value"></label><label>Pattern<select id="pt"><option value="0">Every beat</option><option value="1">Beats 2 and 4 (backbeat)</option><option value="2">Eighth notes</option></select></label><label><input type="checkbox" id="um"> Listen with microphone</label><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><button class="tap" id="tp">TAP</button><button class="btn" id="go2" onclick="runR()">Start</button><div id="rs" aria-live="polite"></div></div>`;
+$("#tp").onpointerdown=e=>{e.preventDefault();hit()}}
+document.addEventListener("keydown",e=>{if(e.code==="Space"&&cur==="rhythm"&&RH&&RH.on){e.preventDefault();hit()}});
+function hit(){if(RH&&RH.on){RH.tp.push(ac().currentTime);const b=$("#tp");b.classList.add("f");setTimeout(()=>b.classList.remove("f"),80)}}
+function dot(i,ci){document.querySelectorAll("#dots i").forEach((d,k)=>{d.className=k===i?(ci?"ci":"on"):""})}
+async function runR(){const c=ac(),bpm=+$("#bp").value,sp=60/bpm,pt=+$("#pt").value;$("#go2").disabled=true;$("#go2").blur();$("#rs").textContent="";
+let um=$("#um").checked;if(um&&!(await mic())){$("#rs").textContent="Microphone unavailable, so use taps.";um=false}
+const t0=c.currentTime+.5,rel=[[0,1,2,3],[1,3],[0,.5,1,1.5,2,2.5,3,3.5]][pt],tg=[];for(let b=0;b<4;b++)rel.forEach(x=>tg.push(t0+(4+b*4+x)*sp));
+RH={on:1,tg,tp:[]};
+for(let n=0;n<20;n++){const t=t0+n*sp;click(t,n%4===0);T.push(setTimeout(()=>dot(n%4,n<4),Math.max(0,(t-c.currentTime)*1000)))}
+if(um){let prev=0,last=0;const f=()=>{if(!RH||!RH.on||!M)return;M.an.getFloatTimeDomainData(M.buf);let s=0;for(let i=3584;i<4096;i++)s+=M.buf[i]*M.buf[i];const r=Math.sqrt(s/512),now=ac().currentTime;if(r>.06&&r>prev*1.8&&now-last>.12){hit();last=now}prev=r*.5+prev*.5;raf=requestAnimationFrame(f)};raf=requestAnimationFrame(f)}
+T.push(setTimeout(finR,(t0+20*sp-c.currentTime+.3)*1000))}
+function finR(){const r=RH;r.on=0;cancelAnimationFrame(raf);let sc=0,h=0,sg=0;
+r.tg.forEach(t=>{let b=null;r.tp.forEach(x=>{if(b===null||Math.abs(x-t)<Math.abs(b-t))b=x});if(b!==null){const e=(b-t)*1000;sc+=Math.max(0,1-Math.abs(e)/150);if(Math.abs(e)<=120){h++;sg+=e}}});
+const score=Math.round(100*sc/r.tg.length),avg=h?Math.round(sg/h):0;S.t[0]+=score;S.t[1]++;S.xp+=10;save();
+let adv=h<r.tg.length*.5?"Many beats were missed. Try a slower tempo first.":Math.abs(avg)>25?`You tend to play about ${Math.abs(avg)} ms ${avg<0?"early":"late"}. Try ${avg<0?"relaxing and waiting for the click":"anticipating the click a little"}.`:"Your timing is steady and centred on the beat. Try a faster tempo or a harder pattern.";
+$("#rs").innerHTML=`<p><span class="good">Timing score: ${score}/100.</span> You hit ${h} of ${r.tg.length} beats. ${adv}</p><p class="mut">Phones and Bluetooth add 50 to 150 ms of delay, so wired headphones give the truest result.</p>`;$("#go2").disabled=false;$("#go2").textContent="Go again";dot(-1)}
+/* songs */
+const SG={"Ode to Joy (theme)":[[64,1],[64,1],[65,1],[67,1],[67,1],[65,1],[64,1],[62,1],[60,1],[60,1],[62,1],[64,1],[64,1.5],[62,.5],[62,2]],
+"Twinkle, Twinkle, Little Star":[[60,1],[60,1],[67,1],[67,1],[69,1],[69,1],[67,2],[65,1],[65,1],[64,1],[64,1],[62,1],[62,1],[60,2]],
+"Mary Had a Little Lamb":[[64,1],[62,1],[60,1],[62,1],[64,1],[64,1],[64,2],[62,1],[62,1],[62,2],[64,1],[67,1],[67,2]]};
+let SP;
+function setSong(n){SP={n,a:0,b:SG[n].length-1,i:0,v:SP?SP.v:80,w:0,on:0};songUI()}
+R.songs=()=>setSong(SP?SP.n:Object.keys(SG)[0]);
+function songUI(){const s=SG[SP.n],ns=s.length;
+V.innerHTML=`<h2>Songs</h2><p class="mut">Slow it down, loop a tricky part, or change the style to hear the same tune played differently. Play along on your instrument or with the on-screen notes. The song waits for you, so go at your own pace. Leave a short gap between repeated notes when using the microphone.</p><div class="card"><label>Song<select id="sn" onchange="setSong(this.value)">${Object.keys(SG).map(k=>`<option${k===SP.n?" selected":""}>${k}</option>`).join("")}</select></label><label>Practise notes <input type="number" id="sa" min="1" max="${ns}" value="${SP.a+1}" onchange="sr()"> to <input type="number" id="sb" min="1" max="${ns}" value="${SP.b+1}" onchange="sr()"></label><label>Speed: <b id="sv">${SP.v}</b>%<input type="range" id="ss" min="50" max="120" value="${SP.v}" oninput="SP.v=+this.value;$('#sv').textContent=this.value"></label><label>Style<select id="sy"><option>Legato</option><option>Staccato</option><option>Swung</option></select></label><div class="chips" id="ch">${s.map((n,i)=>`<span class="chip" id="c${i}">${N[n[0]%12]}</span>`).join("")}</div><p id="st" aria-live="polite" class="mut"></p><button class="btn" id="ln" onclick="listen()">▶ Listen</button><button class="btn" onclick="playS(0)">Play along: on-screen notes</button><button class="btn" onclick="playS(1)">Play along: microphone</button><div class="pad">${N.map((x,i)=>`<button onclick="inp(${i},1)">${x}</button>`).join("")}</div></div>`;sr()}
+function sr(){const ns=SG[SP.n].length;let a=Math.max(1,Math.min(ns,+$("#sa").value||1)),b=Math.max(1,Math.min(ns,+$("#sb").value||ns));if(b<a)b=a;$("#sa").value=a;$("#sb").value=b;SP.a=a-1;SP.b=b-1;SP.i=SP.a;SP.on=0;SP.w=0;paint();$("#st").textContent="Press a Play along button to start."}
+function paint(){SG[SP.n].forEach((n,i)=>{const e=$("#c"+i);e.className="chip"+(i<SP.a||i>SP.b?" off":SP.on&&i<SP.i?" ok":SP.on&&i===SP.i?" cur":"")})}
+function mark(i){SG[SP.n].forEach((n,k)=>{$("#c"+k).className="chip"+(k<SP.a||k>SP.b?" off":k===i?" cur":"")})}
+async function playS(useMic){stop();SP.i=SP.a;SP.w=0;SP.on=1;SP.st=-1;SP.c=0;SP.last=-1;paint();
+if(useMic){if(!(await mic())){$("#st").textContent="Microphone unavailable. Use the on-screen notes, or open this page in its own tab to allow the microphone.";return}loopId=setInterval(songTick,90)}
+$("#st").textContent=`Play note ${SP.i+1}: ${N[SG[SP.n][SP.i][0]%12]}`}
+function songTick(){M.an.getFloatTimeDomainData(M.buf);const f=pitch(M.buf,M.sr);if(f<0){SP.last=-1;SP.st=-1;SP.c=0;return}const pc=((Math.round(69+12*Math.log2(f/440))%12)+12)%12;if(pc===SP.st)SP.c++;else{SP.st=pc;SP.c=1}if(SP.c===2&&pc!==SP.last){SP.last=pc;inp(pc)}}
+function inp(pc,pad){if(pad)tone(60+pc,0,.4);if(!SP||!SP.on)return;const s=SG[SP.n];
+if(pc===s[SP.i][0]%12){SP.i++;if(SP.i>SP.b)return finS();paint();$("#st").textContent=`Play note ${SP.i+1}: ${N[s[SP.i][0]%12]}`}else{SP.w++;$("#st").innerHTML=`<span class="warn">That was ${N[pc]}.</span> Try ${N[s[SP.i][0]%12]} for note ${SP.i+1}.`}}
+function finS(){SP.on=0;micOff();paint();const n=SP.b-SP.a+1,acc=Math.round(100*n/(n+SP.w));S.sf[0]+=acc;S.sf[1]++;S.s[SP.n]=(S.s[SP.n]||0)+1;S.xp+=20;save();document.querySelectorAll(".chip:not(.off)").forEach(c=>c.className="chip ok");$("#st").innerHTML=`<span class="good">Finished with ${acc}% accuracy</span> (${SP.w} wrong ${SP.w===1?"note":"notes"}). ${acc<80?"Loop the tricky notes and slow it down.":"Raise the speed or try another style."}`}
+function listen(){stop();SP.on=0;const c=ac(),s=SG[SP.n],sp=60/(90*SP.v/100),y=$("#sy").value;let t=c.currentTime+.1;$("#ln").disabled=true;
+for(let i=SP.a;i<=SP.b;i++){const d=s[i][1]*sp*(y==="Swung"?(i%2?.7:1.3):1);tone(s[i][0],t,y==="Staccato"?d*.45:d*.95);T.push(setTimeout(()=>mark(i),(t-c.currentTime)*1000));t+=d}
+T.push(setTimeout(()=>{paint();$("#ln").disabled=false},(t-c.currentTime)*1000))}
+/* progress */
+R.progress=()=>{const av=a=>a[1]?Math.round(a[0]/a[1]):null,k=[["Pitch accuracy",av(S.p),"play","Play-it trainer"],["Timing",av(S.t),"rhythm","Rhythm trainer"],["Note recognition",S.e[1]?Math.round(100*S.e[0]/S.e[1]):null,"ear","Ear trainer"],["Song fluency",av(S.sf),"songs","Songs"]],
+w=k.filter(x=>x[1]!==null).sort((a,b)=>a[1]-b[1])[0],sug=S.xp<100?LV[0]:S.xp<300?LV[1]:LV[2],nd=Object.keys(S.done).length;
+V.innerHTML=`<h2>Your progress</h2><div class="card"><p><b>${S.xp}</b> practice points and <b>${nd}</b> lessons completed. Based on your practice, ${sug===S.lvl?`<b>${sug}</b> still suits you.`:`you may be ready for <b>${sug}</b>. <button class="btn ghost" onclick="setLvl('${sug}')">Switch to ${sug}</button>`}</p>${k.map(x=>`<div class="row"><span>${x[0]}</span><div class="bar"><b style="width:${x[1]||0}%"></b></div><span>${x[1]===null?"–":x[1]}</span></div>`).join("")}</div>
+<div class="card"><h3>What to work on next</h3>${w?`<p>${w[0]} is your weakest area at ${w[1]} out of 100. ${w[0]==="Timing"?"Slow the tempo and aim to land on each beat.":w[0]==="Pitch accuracy"?"Hold each note steadily and listen for sharp or flat.":w[0]==="Note recognition"?"Spend a few minutes naming notes by ear every day.":"Loop the hardest notes at a slower speed."}</p><button class="btn" onclick="go('${w[2]}')">Open ${w[3]}</button>`:`<p>No practice data yet. Start with a lesson, then try a trainer and Modo will point you to what needs work.</p><button class="btn" onclick="go('learn')">Open lessons</button>`}</div>
+<button class="btn ghost" id="rst" onclick="resetP()">Reset progress</button>`}
+function resetP(){const b=$("#rst");if(b.dataset.s){const i=S.inst,l=S.lvl;S=JSON.parse(JSON.stringify(D));S.inst=i;S.lvl=l;save();R.progress()}else{b.dataset.s=1;b.textContent="Click again to erase all progress"}}
+/* init */
+load();$("#in").innerHTML=Object.keys(I).map(k=>`<option value="${k}">${I[k].n}</option>`).join("");$("#in").value=S.inst;$("#lv").innerHTML=LV.map(l=>`<option>${l}</option>`).join("");$("#lv").value=S.lvl;
+$("#nav").innerHTML=[["learn","Learn"],["ear","Ear"],["play","Play-it"],["rhythm","Rhythm"],["songs","Songs"],["progress","Progress"]].map(a=>`<button data-v="${a[0]}" onclick="go('${a[0]}')">${a[1]}</button>`).join("");
+go("learn");
+</script></body></html>
